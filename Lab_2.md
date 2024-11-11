@@ -1,18 +1,11 @@
 
-Manipulating Data with the Pandas Library
-=========================================
+Lab 2: Manipulating Data with the Pandas Library
+================================================
 
 In the next few portions of the course, we are going to get our hands
-dirty by building the various kinds of recommender systems that were
-introduced in lab one. However, before we do so, it is important
+dirty by building the various kinds of recommender systems. However, before we do so, it is important
 that we know how to handle, manipulate, and analyze data efficiently in
 Python.
-
-The datasets we\'ll be working with will be several megabytes in size.
-Historically, Python has never been well-known for its speed of
-execution. Therefore, analyzing such huge amounts of data using vanilla
-Python and the built-in data structures it provides us is simply
-impossible.
 
 In this lab, we\'re going to get ourselves acquainted with the
 pandas library, which aims to overcome the aforementioned limitations,
@@ -25,23 +18,13 @@ some interesting facts and narrate the history of movies using data.
 Setting up the environment
 ==========================
 
-Open Lab environment URL and open Jupyter lab or notebook:
-![](./images/c47502be-6824-45a2-a0a1-712a0b5bf4ea.png)
-
-
-To the right of the window, you should be able to see a
-[New] dropdown. Click it and create a new Python 3 (or
-Python 2) Notebook. Doing so will open a new tab with an untitled
-notebook. You\'ll also be able to see an input cell with a pointer in
-it. This is space where we write our code (and markdown). Go ahead and
-type the following lines:
+Open Lab environment URL and open Jupyter lab or notebook and write following code:
 
 
 ```
 import pandas as pd
 pd.__version__
 ```
-
 
 To execute the code in this cell, press *Shift* + *Enter.* If all goes
 well, you should see a new output cell, which prints the version of the
@@ -54,18 +37,6 @@ pandas library:
 The Pandas library
 ==================
 
-Pandas is a package that gives us access to high-performance,
-easy-to-use tools and data structures for data analysis in Python.
-
-As we stated in the introduction, Python is a slow language. Pandas
-overcomes this by implementing heavy optimization using the C
-programming language. It also gives us access to Series and DataFrame,
-two extremely powerful and user-friendly data structures imported from
-the R Statistical Package.
-
-Pandas also makes importing data from external files into the Python
-environment a breeze. It supports a wide variety of formats, such as
-JSON, CSV, HDF5, SQL, NPY, and XLSX.
 
 As a first step toward working with pandas, let\'s import our movies
 data into our Jupyter Notebook. To do this, we need the path to where
@@ -74,13 +45,16 @@ computer. We highly recommend downloading the data to your local
 computer and accessing it from a local path instead of from a web URL.
 
 
-Go to the following URL to download the required CSV file:
+**NOTE:** All datasets used in the labs are available in lab environment and GitHub repository:
+
+`https://github.com/fenago/recommendation-systems-python/tree/main/data`
+
+
+Go to the following URL to view the required CSV file:
 <https://www.kaggle.com/rounakbanik/the-movies-dataset/downloads/movies_metadata.csv/7.>
 
 
-Create a new folder called [data] in the [RecoSys] directory
-and move the [movies\_metadata.csv] file that you just downloaded
-into this folder. Now, let\'s witness some pandas magic. In the Jupyter
+Now, let\'s witness some pandas magic. In the Jupyter
 Notebook you ran in the previous section, go to the second cell and type
 the following code:
 
@@ -109,7 +83,7 @@ type(df)
 
 
 You should get an output stating that df is a
-[pandas.core.frame.DataFrame]*.* In other words, our code has read
+[pandas.core.frame.DataFrame]. In other words, our code has read
 the CSV file into a pandas DataFrame object. But what are DataFrames?
 Let\'s find that out in the next section.
 
@@ -143,7 +117,7 @@ The result gives us the number of rows and columns present in df. We can
 see that we have data on 45,466 movies.
 
 We also see that we have 24 columns. Each column represents a feature or
-a piece of metadata about the movie. When we ran [df.head()]*,* we
+a piece of metadata about the movie. When we ran [df.head()], we
 saw that most of the columns were truncated to fit in the display. To
 view all the columns (henceforth, called features) we have, we can run
 the following:
@@ -269,7 +243,7 @@ memory usage: 2.1+ MB
 
 A curious observation here is that pandas correctly deciphers
 [revenue] and [runtime] as float data, but assigns the
-generic object data type to [budget]*.*
+generic object data type to [budget].
 
 However, pandas allows us to manually convert the data type of a
 feature. Let\'s try to convert the [budget] feature to
@@ -411,9 +385,9 @@ The Pandas Series
 =================
 
 When we accessed the Jumanji movie using [.loc] and
-[.iloc]*,* the data structures returned to us were Pandas Series
+[.iloc], the data structures returned to us were Pandas Series
 objects. You may have also noticed that we were accessing entire columns
-using [df\[column\_name\]]*.* This, too, was a Pandas Series
+using [df\[column\_name\]]. This, too, was a Pandas Series
 object:
 
 
@@ -507,16 +481,10 @@ We have the highest number of movies released in 2014. There are also
 six years in our dataset (including 2020) that have only one movie on
 record.
 
-We\'ll stop our tour of the pandas library here. As I have already
-mentioned, there is much more to pandas than what we have covered in
-this lab. However, this should be sufficient to tackle the
-data-wrangling and analysis tasks that we\'ll encounter while building
-our recommenders.
 
 You may rename the notebook as [Lab2] by clicking on
 [Untitled] and then close it. For the next lab, we
 will create a new notebook.
-
 
 
 Summary

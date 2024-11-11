@@ -1,51 +1,7 @@
 
-Building Content-Based Recommenders
-===================================
+Lab 4: Building Content-Based Recommenders
+==========================================
 
-In the previous lab, we built an IMDB Top 250 clone (a type of
-simple recommender) and a knowledge-based recommender that suggested
-movies based on timeline, genre, and duration. However, these systems
-were extremely primitive. The simple recommender did not take into
-consideration an individual user\'s preferences. The knowledge-based
-recommender did take account of the user\'s preference for genres,
-timelines, and duration, but the model and its recommendations still
-remained very generic.
-
-Imagine that Alice likes the movies *The Dark Knight,* *Iron Man*, and
-*Man of Steel.* It is pretty evident that Alice has a taste for
-superhero movies. However, our models from the previous lab would
-not be able to capture this detail. The best it could do is suggest
-*action* movies (by making Alice input *action* as the preferred genre),
-which is a superset of superhero movies.
-
-It is also possible that two movies have the same genre, timeline, and
-duration characteristics, but differ hugely in their audience. Consider
-*The* *Hangover* and *Forgetting Sarah Marshall,* for example. Both
-these movies were released in the first decade of the 21st century, both
-lasted around two hours, and both were comedies. However, the kind of
-audience that enjoyed these movies was very different.
-
-An obvious fix to this problem is to ask the user for more metadata as
-input. For instance, if we introduced a *sub-genre* input, the user
-would be able to input values such as *superhero, black comedy,* and
-*romantic comedy,* and obtain more appropriate results, but this
-solution suffers heavily from the perspective of usability.
-
-The first problem is that we do not possess data on *sub-genres.*
-Secondly, even if we did, our users are extremely unlikely to possess
-knowledge of their favorite movies\' metadata. Finally, even if they
-did, they would certainly not have the patience to input it into a long
-form. Instead, what they would be more willing to do is tell you the
-movies they like/dislike and expect recommendations that match their
-tastes.
-
-As we discussed in the first lab, this is exactly what sites like
-Netflix do. When you sign up on Netflix for the first time, it doesn\'t
-have any information about your tastes for it to build a profile,
-leverage the power of its community, and give you recommendations with
-(a concept we\'ll explore in later labs). Instead, what it does is
-ask you for a few movies you like and show you results that are most
-similar to those movies.
 
 In this lab, we are going to build two types of content-based
 recommender:
@@ -69,7 +25,7 @@ that was more usable. To avoid having to perform these steps again,
 let\'s save this cleaned DataFrame into a CSV file. As always, doing
 this with pandas happens to be extremely easy.
 
-In the knowledge recommender notebook from Lab 4*,* enter the
+In the knowledge recommender notebook from Lab 4, enter the
 following code in the last cell:
 
 
@@ -83,12 +39,13 @@ df.to_csv('../data/metadata_clean.csv', index=False)
 Your [data] folder should now contain a new file,
 [metadata\_clean.csv].
 
-Let\'s create a new folder, [Lab 4]*,* and open a new Jupyter
+Let\'s create a new folder, [Lab 4], and open a new Jupyter
 Notebook within this folder. Let\'s now import our new file into this
 Notebook:
 
 
 ```
+import random
 import pandas as pd
 import numpy as np
 
@@ -108,141 +65,29 @@ desired form.
 Document vectors
 ================
 
-Essentially, the models we are building compute the pairwise similarity
-between bodies of text. But how do we numerically quantify the
-similarity between two bodies of text?
-
-To put it another way, consider three movies: A, B, and C. How can we
-mathematically prove that the plot of A is more similar to the plot of B
-than to that of C (or vice versa)?
-
-The first step toward answering these questions is to represent the
-bodies of text (henceforth referred to as documents) as mathematical
-quantities. This is done by representing these documents as vectors*.*
-In other words, every document is depicted as a series of *n* numbers,
-where each number represents a dimension and *n* is the size of the
-vocabulary of all the documents put together.
-
-But what are the values of these vectors? The answer to that question
-depends on the *vectorizer* we are using to convert our documents into
-vectors. The two most popular vectorizers are CountVectorizer and
-TF-IDFVectorizer*.*
-
+To quantify the similarity between documents, we represent them as vectors, where each document is a series of *n* numbers, with *n* being the size of the combined vocabulary. The values of these vectors depend on the *vectorizer* used, such as **CountVectorizer** or **TF-IDFVectorizer**, which convert text into numerical representations for similarity calculations.
 
 
 CountVectorizer
 ===============
 
-CountVectorizer is the simplest type of vectorizer and is best explained
-with the help of an example. Imagine that we have three documents, A, B,
-and C, which are as follows:
+**CountVectorizer** converts documents into numerical vectors based on word frequency. For example, given three documents, we first create a vocabulary of unique words (ignoring common stop words). After eliminating words like "the" and "is," the vocabulary becomes: *like, little, lamb, love, mary, red, rose, sun, star*.
 
--   **A**: The sun is a star.
--   **B**: My love is like a red, red rose
--   **C**: Mary had a little lamb
+Each document is then represented as a vector where each dimension counts the occurrences of these words. For example:
 
-We now have to convert these documents into their vector forms using
-CountVectorizer. The first step is to compute the size of the
-vocabulary. The vocabulary is the number of unique words present across
-all documents. Therefore, the vocabulary for this set of three documents
-is as follows: the, sun, is, a, star, my, love, like, red, rose, mary,
-had, little, lamb. Consequently, the size of the vocabulary is 14.
+- **A**: (0, 0, 0, 0, 0, 0, 0, 1, 1)  
+- **B**: (1, 0, 0, 1, 0, 2, 1, 0, 0)  
+- **C**: (0, 1, 1, 0, 1, 0, 0, 0, 0)
 
-It is common practice to not include extremely common words such as a,
-the, is, had, my, and so on (also known as stop words) in the
-vocabulary. Therefore, eliminating the stop words, our vocabulary, *V,*
-is as follows:
-
-**V**: like, little, lamb, love, mary, red, rose, sun, star
-
-The size of our vocabulary is now nine. Therefore, our documents will be
-represented as nine-dimensional vectors, and each dimension here will
-represent the number of times a particular word occurs in a document. In
-other words, the first dimension will represent the number of times like
-occurs, the second will represent the number of times little occurs, and
-so on.
-
-Therefore, using the CountVectorizer approach, A, B, and C will now be
-represented as follows:
-
--   **A**: (0, 0, 0, 0, 0, 0, 0, 1, 1)
--   **B**: (1, 0, 0, 1, 0, 2, 1, 0, 0)
--   **C**: (0, 1, 1, 0, 1, 0, 0, 0, 0)
-
+These vectors allow us to compare document similarities based on word frequency.
 
 
 TF-IDFVectorizer
 ================
 
-Not all words in a document carry equal weight. We already observed this
-when we eliminated the stop words from our vocabulary altogether. But
-the words that were in the vocabulary were all given equal weighting.
-
-But should this always be the case?
-
-For example, consider a corpus of documents on dogs. Now, it is obvious
-that all these documents will frequently contain the word dog.
-Therefore, the appearance of the word *dog* isn\'t as important as
-another word that only appears in a few documents.
-
-**TF-IDFVectorizer** (**Term Frequency-Inverse Document
-Frequency**)takes the aforementioned point into consideration and
-assigns weights to each word according to the following formula. For
-every word *i* in document *j*, the following applies:
-
-
-![](./images/3d0955be-dfd1-488a-9288-d0a0c83922e3.png)
-
-
-In this formula, the following is true:
-
--   *w*~*i,\ j*~ is the weight of word *i* in document *j\
-    *
--   *df~i~* is the number of documents that contain the term *i\
-    *
--   *N* is the total number of documents
-
-We won\'t go too much into the formula and the associated calculations.
-Just keep in mind that the weight of a word in a document is greater if
-it occurs more frequently in that document and is present in fewer
-documents. The weight *w*~*i,j*~ takes values between [0] and
-[1]:
-
-
 ![](./images/b02a313f-7888-4ddd-8398-411cfa8e712f.png)
 
-
-We will be using TF-IDFVectorizer because some words (pictured in the
-preceding word cloud) occur much more frequently in plot descriptions
-than others. It is therefore a good idea to assign weights to each word
-in a document according to the TF-IDF formula.
-
-Another reason to use TF-IDF is that it speeds up the calculation of the
-cosine similarity score between a pair of documents. We will discuss
-this point in greater detail when we implement this in code.
-
-
-
-The cosine similarity score
-===========================
-
-We will discuss similarity scores in detail in Lab 5,
-*Getting Started with Data Mining Techniques*. Presently, we will make
-use of the *cosine similarity* metric to build our models. The cosine
-score is extremely robust and easy to calculate (especially when used in
-conjunction with TF-IDFVectorizer).
-
-The cosine similarity score between two documents, *x* and *y,* is as
-follows:
-
-
-![](./images/848e2bba-80ee-4352-94ed-ddbc3997b56a.png)
-
-
-The cosine score can take any value between -1 and 1. The higher the
-cosine score, the more similar the documents are to each other. We now
-have a good theoretical base to proceed to build the content-based
-recommenders using Python.
+We use **TF-IDFVectorizer** to assign weights to words based on their importance, improving the representation of plot descriptions. It also speeds up the calculation of **cosine similarity** between documents by emphasizing key terms.
 
 
 
@@ -292,7 +137,7 @@ The DataFrame should now contain two new features: [overview] and
 The [overview] feature consists of strings and, ideally, we should
 clean them up by removing all punctuation and converting all the words
 to lowercase. However, as we will see shortly, all this will be done for
-us automatically by [scikit-learn]*,* the library we\'re going to
+us automatically by [scikit-learn], the library we\'re going to
 use heavily in building the models in this lab.
 
 
@@ -336,13 +181,6 @@ the overview of every movie.
 Computing the cosine similarity score
 =====================================
 
-The next step is to calculate the pairwise cosine similarity score of
-every movie. In other words, we are going to create a 45,466 × 45,466
-matrix, where the cell in the *i^th^* row and *j^th^* column represents
-the similarity score between movies *i* and *j.* We can easily see that
-this matrix is symmetric in nature and every element in the diagonal is
-1, since it is the similarity score of the movie with itself.
-
 Like TF-IDFVectorizer, [scikit-learn] also has functionality for
 computing the aforementioned similarity matrix. Calculating the cosine
 similarity is, however, a computationally expensive process.
@@ -358,8 +196,11 @@ cheaper dot product (a functionality that is also provided by
 # Import linear_kernel to compute the dot product
 from sklearn.metrics.pairwise import linear_kernel
 
+sample_indices = random.sample(range(tfidf_matrix.shape[0]), 15000)
+tfidf_matrix_sampled = tfidf_matrix[sample_indices]
+
 # Compute the cosine similarity matrix
-cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+cosine_sim = linear_kernel(tfidf_matrix_sampled, tfidf_matrix_sampled)
 ```
 
 
@@ -444,21 +285,7 @@ content_recommender('The Lion King')
 ![](./images/b4947e84-7420-41ae-be55-37bfda306563.png)
 
 
-We see that our recommender has suggested all of *The Lion King\'s*
-sequels in its top-10 list. We also notice that most of the movies in
-the list have to do with lions.
-
-It goes without saying that a person who loves *The Lion King* is very
-likely to have a thing for Disney movies. They may also prefer to watch
-animated movies. Unfortunately, our plot description recommender isn\'t
-able to capture all this information.
-
-Therefore, in the next section, we will build a recommender that uses
-more advanced metadata, such as genres, cast, crew, and keywords (or
-sub-genres). This recommender will be able to do a much better job of
-identifying an individual\'s taste for a particular director, actor,
-sub-genre, and so on.
-
+Our current recommender suggests mostly *The Lion King* sequels and lion-themed movies, but it misses broader preferences like Disney or animated films. To improve, we'll build a new system using advanced metadata (genres, cast, crew, keywords) to better capture individual tastes in directors, actors, and sub-genres.
 
 
 Metadata-based recommender
@@ -482,12 +309,12 @@ To build this model, we will be using the following metdata:
 
 With the exception of genres, our DataFrames (both original and cleaned)
 do not contain the data that we require. Therefore, for this exercise,
-we will need to download two additional files: [credits.csv]*,*
+we will need two additional files: [credits.csv],
 which contains information on the cast and crew of the movies, and
-[keywords.csv]*,* which contains information on the sub-genres.
+[keywords.csv], which contains information on the sub-genres.
 
 
-You can download the necessary files from the following URL:
+You can view the necessary files from the following URL:
 <https://www.kaggle.com/rounakbanik/the-movies-dataset/data>.
 
 
@@ -529,7 +356,7 @@ key_df.head()
 
 
 We can see that the cast, crew, and the keywords are in the familiar
-[list of dictionaries] form. Just like [genres]*,* we have
+[list of dictionaries] form. Just like [genres], we have
 to reduce them to a string or a list of strings.
 
 Before we do this, however, we will join the three DataFrames so that
@@ -605,9 +432,9 @@ are the transformations we will be looking to perform:
     a keyword (similar to genres). We will include only the top three
     keywords. Therefore, this list can have a maximum of three elements.
 -   Convert [cast] into a list of strings where each string is a
-    star. Like [keywords]*,* we will only include the top three
+    star. Like [keywords], we will only include the top three
     stars in our cast.
--   Convert [crew] into [director]*.* In other words, we
+-   Convert [crew] into [director]. In other words, we
     will extract only the director of the movie and ignore all other
     crew members.
 
@@ -689,7 +516,7 @@ Both [keywords] and [cast] are dictionary lists as well.
 And, in both cases, we need to extract the top three [name]
 attributes of each list. Therefore, we can write a single function to
 wrangle both these features. Also, just like [keywords] and
-[cast]*,* we will only consider the top three genres for every
+[cast], we will only consider the top three genres for every
 movie:
 
 
@@ -852,8 +679,11 @@ compute our scores:
 #Import cosine_similarity function
 from sklearn.metrics.pairwise import cosine_similarity
 
+sample_indices = random.sample(range(count_matrix.shape[0]), 15000)
+count_matrix_sampled = count_matrix[sample_indices]
+
 #Compute the cosine similarity score (equivalent to dot product for tf-idf vectors)
-cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+cosine_sim2 = cosine_similarity(count_matrix_sampled, count_matrix_sampled)
 ```
 
 

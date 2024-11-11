@@ -1,23 +1,12 @@
 
-Hybrid Recommenders
-===================
+Lab 7: Hybrid Recommenders
+==========================
 
 In this final lab, we will discuss recommender systems in the
 context of practicality and industrial use. Until now, we have learned
 about various types of recommender, including knowledge, content, and
 collaborative filtering-based engines. However, when used in practice,
 each recommender usually suffers from one shortcoming or another.
-
-We\'ve discussed these shortcomings in the very first lab (for
-instance, the novelty problem of content-based engines and the cold
-start problem of collaborative filters). We also briefly introduced the
-concept of the hybrid recommender: a robust system that combines various
-models to combat the disadvantage of one model with the advantage of
-another. In this lab, we will build a simple hybrid recommender that
-combines the content and the collaborative filters that we\'ve built
-thus far.
-
-
 
 Introduction
 ============
@@ -41,11 +30,11 @@ in the following screenshot:
 
 Here, we can see that while watching *Ratatouille,* Netflix recommends
 movies to me that are very similar to *Ratatouille*. All the top five
-recommended movies are all animated and produced by Disney Pixar*.*
+recommended movies are all animated and produced by Disney Pixar.
 
 However, animated movies are not the only genre I watch on Netflix. I
 also like watching drama and comedy. Netflix has a separate row of
-recommendations for me entitled [Top Picks for Rounak]*,*
+recommendations for me entitled [Top Picks for Rounak],
 where it uses collaborative filtering to identify users similar to me
 and recommend movies that they have liked, but that I haven\'t watched:
 
@@ -93,22 +82,10 @@ In other words, the workflow of our hybrid model will be as follows:
 We will be using different datasets for this task. Go ahead and download
 the datasets from the following links.
 
-Download the following datasets from Kaggle and Google Drive:
+**NOTE:** All datasets used in the lab are available in lab environment and GitHub repository:
 
--   [ratings\_small.csv]:
-    <https://www.kaggle.com/rounakbanik/the-movies-dataset/downloads/ratings_small.csv/7>.
--   [movie\_ids.csv]:
-    <https://drive.google.com/drive/folders/1H9pnfVTzP46s7VwOTcC5ZY_VahRTr5Zv?usp=sharing>.
+`https://github.com/fenago/recommendation-systems-python/tree/main/data`
 
-The [ratings\_small.csv] file contains 100,000 ratings for 9,000
-movies from 700 users. We use this file since it contains ratings for
-more recent movies (the dataset we used for collaborative filtering only
-contained movies released before 1998).
-
-The[ links\_small.csv] file contains the movie IDs of all the
-movies rated in the[ ratings\_small.csv] file and their
-corresponding titles. We can use these IDs to extract relevant metadata
-from the [movies\_metadata.csv] file.
 
 With these files in hand, let\'s proceed to build our model. The first
 step is to compute the [cosine\_sim] matrix for our movies. In
@@ -118,14 +95,7 @@ addition, we also need to map every movie to the indices in the
 the mapping, therefore, is left as an exercise for the reader.
 
 
-You can download my [cosine\_sim ]and[ cosine\_sim\_map]
-files from the following link:\
-<https://drive.google.com/drive/folders/1H9pnfVTzP46s7VwOTcC5ZY_VahRTr5Zv?usp=sharing>.
-However, be aware that the [cosine\_sim] file is over 1 GB in
-size, and therefore might take some time to download.
-
-
-Next, let\'s use the [ratings.csv] file to build a collaborative
+Next, let\'s build a collaborative
 filtering model. We will use the SVD model from the last lab for
 this purpose:
 
@@ -164,9 +134,6 @@ release. This information can be extracted from the main
 the reader.
 
 
-You can download the required metadata file from the following link:
-<https://drive.google.com/drive/folders/1H9pnfVTzP46s7VwOTcC5ZY_VahRTr5Zv?usp=sharing>
-
 
 We\'re finally in a position to build the hybrid recommender function
 according to the workflow described previously:
@@ -175,7 +142,7 @@ according to the workflow described previously:
 ```
 def hybrid(userId, title):
     #Extract the cosine_sim index of the movie
-    idx = cosine_sim_map[title]
+    idx = cosine_sim_map[cosine_sim_map == title].index[0]
     
     #Extract the TMDB ID of the movie
     tmdbId = title_to_id.loc[title]['id']
@@ -245,50 +212,10 @@ Summary
 With this, we come to the end of this lab, as well as the main part
 of the course. In this course, we learned the following:
 
--   We were introduced to the world of recommender systems. We defined
-    the recommendation problem mathematically and discussed the various
-    types of recommendation engines that exist, as well as their
-    advantages and disadvantages.
--   We then learned to perform data wrangling with the pandas library
-    and familiarized ourselves with two of pandas, most powerful data
-    structures: the series and the DataFrame.
--   With our newly found data wrangling techniques, we proceeded to
-    build an IMDB Top 250 clone. We then improved on this model to build
-    a knowledge-based recommender that took into account the recommended
-    movies\' genre, duration, and year of release.
--   Next, we learned how to build content-based recommenders using plot
-    lines and subsequently more sophisticated metadata, such as the
-    genre, cast, crew, and keywords. In the process, we familiarized
-    ourselves with vectorizers and the cosine similarity metric.
--   In the lab on data mining, we were introduced to the various
-    techniques used in building and improving recommendation systems. We
-    learned about similarity metrics other than the cosine score. We
-    then proceeded to study clustering, with an emphasis on k-means
-    clustering techniques. This was followed by discussions on
-    dimensionality reduction (with an emphasis on PCA) and the various
-    supervised learning techniques. the lab concluded with a tour of
-    evaluation metrics that are used to gauge the performance of
-    recommender systems.
--   the lab on collaborative filtering had us experimenting with a
-    variety of models that used rating data, and also leveraged data
-    mining techniques introduced in the previous lab. We were also
-    introduced to the [surprise] library, which made building
-    recommender systems a breeze.
--   In this final lab, we briefly discussed the various kinds of
-    hybrid recommender used in the industry today and built a model that
-    incorporated collaborative filtering into a content-based engine to
-    offer personalized recommendations to a user, while keeping the
-    current movie being watched in mind.
-
-What we have covered, of course, only touches the surface of the world
-of recommender systems. However, I am positive that readers will now be
-in a very good place to tackle advanced topics in the field. I have
-listed a few resources in the [Appendix] that could serve as a
-next stop on your journey to becoming a recommendations master.
-
-As mentioned earlier, all the code written as part of this course is
-available as a GitHub repository to enable you to effortlessly tinker
-and experiment with the code as you journey through this course. I\'d like
-to thank you all for having come this far. If you have any comments,
-corrections, criticism, or suggestions, feel free to contact me at
-[rounakbanik\@gmail.com].
+1. We introduced recommender systems, defined the problem, and discussed different types of recommendation engines.  
+2. We learned data wrangling with pandas, focusing on Series and DataFrames.  
+3. We built an IMDB Top 250 clone and enhanced it into a knowledge-based recommender using genre, duration, and release year.  
+4. We explored content-based recommenders using plot lines and metadata, applying vectorizers and cosine similarity.  
+5. We covered data mining techniques, including clustering (k-means), PCA, supervised learning, and evaluation metrics.  
+6. We experimented with collaborative filtering models and used the *surprise* library to simplify implementation.  
+7. We built a hybrid recommender combining collaborative filtering and content-based approaches for personalized recommendations.

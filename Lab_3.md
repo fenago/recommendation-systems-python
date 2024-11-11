@@ -1,9 +1,9 @@
 
-Building an IMDB Top 250 Clone with Pandas
-==========================================
+Lab 3: Building an IMDB Top 250 Clone with Pandas
+=================================================
 
 The **Internet Movie** **Database** (**IMDB**) maintains a chart called
-the IMDB Top 250*,* which is a ranking of the top 250 movies according
+the IMDB Top 250, which is a ranking of the top 250 movies according
 to a certain scoring metric. All the movies in this list are
 non-documentary, theatrical releases with a runtime of at least 45
 minutes and over 250,000 ratings:
@@ -33,7 +33,7 @@ The simple recommender
 ======================
 
 The first step in building our simple recommender is setting up our
-workspace. Let\'s create a new directory named [Lab3]*.*
+workspace. Let\'s create a new directory named [Lab3].
 Create a Jupyter Notebook in this directory named [Simple
 Recommender] and open it in the browser.
 
@@ -81,78 +81,13 @@ metric score than the other movie. It is very important that we have a
 robust and a reliable metric to build our chart upon to ensure a good
 quality of recommendations.
 
-The choice of a metric is arbitrary. One of the simplest metrics that
-can be used is the movie rating. However, this suffers from a variety of
-disadvantages. In the first place, the movie rating does not take the
-popularity of a movie into consideration. Therefore, a movie rated 9 by
-100,000 users will be placed below a movie rated 9.5 by 100 users.\
-This is not desirable as it is highly likely that a movie watched and
-rated only by 100 people caters to a very specific niche and may not
-appeal as much to the average person as the former.
-
-It is also a well-known fact that as the number of voters increase, the
-rating of a movie normalizes and it approaches a value that is
-reflective of the movie\'s quality and popularity with the general
-populace. To put it another way, movies with very few ratings are not
-very reliable. A movie rated 10/10 by five users doesn\'t necessarily
-mean that it\'s a good movie.
-
-Therefore, what we need is a metric that can, to an extent, take into
-account the movie rating and the number of votes it has garnered (a
-proxy for popularity). This would give a greater preference to a
-blockbuster movie rated 8 by 100,000 users over an art house movie rated
-9 by 100 users.
-
-Fortunately, we do not have to brainstorm a mathematical formula for the
-metric. As the title of this lab states, we are building an IMDB top
-250 clone. Therefore, we shall use IMDB\'s weighted rating formula as
-our metric. Mathematically, it can be represented as follows:
-
-
-*Weighted Rating (WR) =*
-![](./images/4489b75d-977e-4557-895a-2aeff1f98725.png)
-
-
-The following apply:
-
--   *v* is the number of votes garnered by the movie
--   *m* is the minimum number of votes required for the movie to be in
-    the chart (the prerequisite)
--   *R* is the mean rating of the movie
--   *C* is the mean rating of all the movies in the dataset
-
-We already have the values for *v* and *R* for every movie in the form
-of the [vote\_count] and [vote\_average] features
-respectively. Calculating *C* is extremely trivial, as we have already
-seen in the previous lab.
-
-
 
 The prerequisties
 =================
 
-The IMDB weighted formula also has a variable *m* , which it requires to
-compute its score. This variable is in place to make sure that only
-movies that are above a certain threshold of popularity are considered
-for the rankings. Therefore, the value of *m* determines the movies that
-qualify to be in the chart and also, by being part of the formula,
-determines the final value of the score.
+The variable **m** in the IMDb weighted rating formula sets a threshold for movie popularity, ensuring that only films with a certain number of votes are considered for the rankings. It is defined as the number of votes of the 80th percentile movie in the dataset, meaning that only movies with more votes than 80% of other films qualify.
 
-Just like the metric, the choice of the value of *m* is arbitrary. In
-other words, there is no right value for *m.* It is a good idea to
-experiment with different values of *m* and then choose the one that you
-(and your audience) think gives the best recommendations. The only thing
-to be kept in mind is that the higher the value of *m,* the higher the
-emphasis on the popularity of a movie, and therefore the higher the
-selectivity.
-
-For our recommender, we will use the number of votes garnered by the
-80th percentile movie as our value for *m.* In other words, for a movie
-to be considered in the rankings, it must have garnered more votes than
-at least 80% of the movies present in our dataset. Additionally, the
-number of votes garnered by the 80th percentile movie is used in the
-weighted formula described previously to come up with the value for the
-scores.
+The choice of **m** can be adjusted to control the balance between popularity and score quality. A higher value of **m** makes the rankings more selective, focusing on well-known films, while a lower value allows more movies to be considered, including lesser-known titles. Experimenting with different values helps optimize the recommender's performance.
 
 Let us now calculate the value of *m*:
 
@@ -234,7 +169,7 @@ def weighted_rating(x, m=m, C=C):
 
 
 Next, we will use the familiar [apply] function on our
-[q\_movies] DataFrame to construct a new feature score*.* Since
+[q\_movies] DataFrame to construct a new feature score. Since
 the calculation is done for every row, we will set the axis to [1]
 to denote row-wise operation:
 
@@ -289,7 +224,7 @@ other words, our data needs to be wrangled before it can be put to use
 to build this recommender.
 
 In our [Lab3] folder, let\'s create a new Jupyter Notebook
-named [Knowledge Recommender]*.* This notebook will contain all
+named [Knowledge Recommender]. This notebook will contain all
 the code that we write as part of this section.
 
 As usual, let us load our packages and the data into our notebook.
@@ -346,7 +281,7 @@ df['year'] = df['release_date'].apply(lambda x: str(x).split('-')[0] if x != np.
 Our [year] feature is still an [object] and is riddled with
 [NaT] values, which are a type of null value used by Pandas.
 Let\'s convert these values to an integer, [0], and convert the
-datatype of the [year] feature into [int]*.*
+datatype of the [year] feature into [int].
 
 To do this, we will define a helper function, [convert\_int], and
 apply it to the [year] feature:
@@ -380,7 +315,7 @@ df.head()
 
 The [runtime] feature is already in a form that is usable. It
 doesn\'t require any additional wrangling. Let us now turn our attention
-to [genres]*.*
+to [genres].
 
 
 
@@ -432,8 +367,8 @@ We now have all the tools required to convert the *genres* feature into
 the Python dictionary format.
 
 Also, each dictionary represents a genre and has two keys: [id]
-and [name]*.* However, for this exercise (as well as all
-subsequent exercises), we only require the [name]*.* Therefore, we
+and [name]. However, for this exercise (as well as all
+subsequent exercises), we only require the [name]. Therefore, we
 shall convert our list of dictionaries into a list of strings, where
 each string is a genre name:
 

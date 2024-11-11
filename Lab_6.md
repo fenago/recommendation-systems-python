@@ -1,6 +1,6 @@
 
-Building Collaborative Filters
-==============================
+Lab 6: Building Collaborative Filters
+=====================================
 
 In the previous lab, we mathematically defined the collaborative
 filtering problem and gained an understanding of various data mining
@@ -47,24 +47,24 @@ which contains 100,000 ratings applied by 1,000 users to 1,700 movies.
 
 
 
-Downloading the dataset
+Viewing the dataset
 =======================
 
-Without any further ado, let\'s go ahead and download the 100,000
+Without any further ado, let\'s go ahead and view the 100,000
 dataset. The dataset available on the official GroupLens site does not
 provide us with user demographic information anymore. Therefore, we will
 use a legacy dataset made available on Kaggle by Prajit Datta.
 
 
-Download the MovieLens 100,000 dataset at
+View the MovieLens 100,000 dataset at
 <https://www.kaggle.com/prajitdatta/movielens-100k-dataset/data>.
 
 
-Unzip the folder and rename it [movielens]*.* Next, move this
-folder into the [data] folder within [RecoSys]*.* The
+Unzip the folder and rename it [movielens]. Next, move this
+folder into the [data] folder. The
 MovieLens dataset should contain around 23 files. However, the only
 files we are interested in are [u.data], [u.user], and
-[u.item]*.* Let\'s explore these files in the next section.
+[u.item]. Let\'s explore these files in the next section.
 
 
 
@@ -200,7 +200,7 @@ ratings is in the training dataset and 25% is in the testing dataset. We
 will do this using a slightly hacky way: we will assume that the
 [user\_id] field is the target variable (or [y]) and that
 our [ratings] DataFrame consists of the predictor variables (or
-[X])*.* We will then pass these two variables into scikit-learn\'s
+[X]). We will then pass these two variables into scikit-learn\'s
 [train\_test\_split] function and [stratify] it along *y.*
 This ensures that the proportion of each class is the same in both the
 training and testing datasets:
@@ -373,6 +373,10 @@ def cf_user_mean(user_id, movie_id):
 #Compute RMSE for the Mean model
 score(cf_user_mean)
 
+```
+
+
+```
 OUTPUT:
 1.0234701463131335
 ```
@@ -380,7 +384,6 @@ OUTPUT:
 
 We see that the score obtained for this model is lower and therefore
 better than the baseline.
-
 
 
 Weighted mean
@@ -502,16 +505,6 @@ However, we achieve a (very small) improvement in our RMSE score.
 
 User demographics
 =================
-
-Finally, let\'s take a look at filters that leverage user demographic
-information. The basic intuition behind these filter is that users of
-the same demographic tend to have similar tastes. Therefore, their
-effectiveness depends on the assumption that women, or teenagers, or
-people from the same area will share the same taste in movies.
-
-Unlike the previous models, these filters do not take into account the
-ratings given by all users to a particular movie. Instead, they only
-look at those users that fit a certain demographic.
 
 Let\'s now build a gender demographic filter. All this filter does is
 identify the gender of a user, compute the (weighted) mean rating of a
@@ -660,71 +653,11 @@ with different (perhaps more informed) default ratings.
 
 
 
-Item-based collaborative filtering
-==================================
-
-Item-based collaborative filtering is essentially user-based
-collaborative filtering where the users now play the role that items
-played, and vice versa.
-
-In item-based collaborative filtering, we compute the pairwise
-similarity of every item in the inventory. Then, given [user\_id]
-and [movie\_id]*,* we compute the weighted mean of the ratings
-given by the user to all the items they have rated. The basic idea
-behind this model is that a particular user is likely to rate two items
-that are similar to each other similarly.
-
-Building an item-based collaborative filter is left as an exercise to
-the reader. The steps involved are exactly the same except now, as
-mentioned earlier, the movies and users have swapped places.
-
-
-
-Model-based approaches
-======================
-
-The collaborative filters we have built thus far are known as
-memory-based filters. This is because they only make use of similarity
-metrics to come up with their results. They learn any parameters from
-the data or assign classes/clusters to the data. In other words, they do
-not make use of machine learning algorithms.
-
-In this section, we will take a look at some filters that do. We spent
-an entire lab looking at various supervised and unsupervised
-learning techniques. The time has finally come to see them in action and
-test their potency.
-
-
 
 Clustering
 ==========
 
-In our weighted mean-based filter, we took every user into consideration
-when trying to predict the final rating. In contrast, our
-demographic-based filters only took users that fit a certain demographic
-into consideration. We saw that the demographic filters performed poorly
-compared to the weighted mean filter.
-
-But does this necessarily imply that we need to take all users into
-consideration to achieve better results?
-
-One of the major drawbacks of the demographic filters was that they were
-based on the assumption that people from a certain demographic think and
-rate alike. However, we can safely say that this is an overreached
-assumption. Not all men like action movies. Nor do all children like
-animated movies. Similarly, it is extremely far-fetched to assume that
-people from a particular area or occupation will have the same taste.
-
-We need to come up with a way of grouping users with a much more
-powerful metric than demographics. From Lab 5,
-*Getting Started with Data Mining Techniques*, we already know of one
-extremely powerful tool: [clustering]*.*
-
-It is possible to use a clustering algorithm, such as k-means, to group
-users into a cluster and then take only the users from the same cluster
-into consideration when predicting ratings.
-
-In this section, we will use k-means\' sister algorithm, kNN*,* to build
+In this section, we will use k-means\' sister algorithm, kNN, to build
 our clustering-based collaborative filter. In a nutshell, given an user,
 *u*, and a movie, *m*, these are the steps involved:
 
@@ -740,26 +673,6 @@ robust library called [surprise]:
 
 
 ![](./images/6f23c30a-a1c2-4fa8-9209-dfb7090f95de.png)
-
-
-Surprise is a scikit (or scientific kit) for building recommender
-systems in Python. You can think of it as scikit-learn\'s recommender
-systems counterpart. According to its documentation, [surprise]
-stands for Simple Python Recommendation System Engine. Within a very
-short span of time, [surprise] has gone on to become one of the
-most popularly used recommender libraries. This is because it is
-extremely robust and easy to use. It gives us ready-to-use
-implementations of most of the popular collaborative filtering
-algorithms and also allows us to integrate an algorithm of our own into
-the framework.
-
-To download [surprise], like any other Python library, open up
-your Terminal and type the following command:
-
-
-```
-sudo pip3 install scikit-surprise
-```
 
 
 Let\'s now build and evaluate our kNN-based collaborative filter.
@@ -794,7 +707,7 @@ Here is its output:
 
 
 The output indicates that the filter is making use of a technique known
-as fivefold [cross-validation]*.* In a nutshell, this means that
+as fivefold [cross-validation]. In a nutshell, this means that
 [surprise] divides the data into five equal parts. It then uses
 four parts as the training data and tests it on the fifth part. This is
 done five times, in such a way that every part plays the role of the
@@ -808,112 +721,12 @@ collaborative filtering and implement a few of them using the *surprise*
 library.
 
 
-
-Supervised learning and dimensionality reduction
-================================================
-
-Consider our ratings matrix once again. It is of the *m* × *n* shape,
-where every row represents one of the *m* users and every column
-represents one of the *n* items.
-
-Let\'s now remove one of the *n* columns (say n~j~). We now have an *m*
-× (*n*-1) matrix. If we treat the *m* × (*n*-1) matrix as the predictor
-variables and n~j~ as the target variable, we can use supervised
-learning algorithms to train on the values available in n~j~ to predict
-values that are not. This can be repeated n times for every column to
-eventually complete our matrix.
-
-One big problem is that most supervised learning algorithms do not work
-with missing data. In standard problems, it is common practice to impute
-the missing values with the mean or median of the column it belongs to.
-
-However, our matrix suffers from heavy data sparsity. More than 99% of
-the data in the matrix is unavailable. Therefore, it is simply not
-possible to impute values (such as mean or median) without introducing a
-large bias.
-
-One solution that may come to mind is to compress the predictor matrix
-in such a way that all the values are available. Unfortunately,
-dimensionality reduction techniques, such as SVD and PCA, also do not
-work in an environment with missing values.
-
-While working toward a solution for the Netflix Problem, Simon Funk came
-up with a solution that could be used to reduce the *m* × (*n*-1) matrix
-into a lower-dimensional *m* × *d* matrix where *d* \<\< *n*. He used
-standard dimensionality-reduction techniques (in his case, the SVD) but
-with slight tweaks. Explaining the technique is outside the scope of
-this course, but is presented in the Appendix for advanced readers. For
-the sake of this lab, we will treat this technique as a black box
-that converts an *m* × *n* sparse matrix into an *m* × *d* dense matrix
-where *d* \<\< *n*, and call it [SVD-like]*.*
-
 Let\'s now turn our attention to perhaps the most famous recommendation
-algorithm of all time: singular-value decomposition*.*
-
+algorithm of all time: singular-value decomposition.
 
 
 Singular-value decomposition
 ============================
-
-In Lab 5,
-*Getting Started with Data Mining Techniques*, we mentioned that the
-math behind singular-value decomposition is well outside the scope of
-this course. However, let\'s try to gain an understanding of how it works
-from a layman\'s perspective.
-
-Recall from Lab 5,
-*Getting Started with Data Mining Techniques,* that **PCA** (
-**Principal Component Analysis**) transforms an *m* × *n* matrix into
-*n*, *m*-dimensional vectors (called principal components) in such a way
-that each component is orthogonal to the next component. It also
-constructs these components in such a way that the first component holds
-the most variance (or information), followed by the second component,
-and so on.
-
-Let\'s denote our ratings matrix as *A.* The transpose of this matrix
-would be *A^T^*, which would be of the *n* × *m* shape and each row
-would represent a movie (instead of a user).
-
-We can now use PCA to construct two new matrices, *U* and *V*, from *A*
-and *A^T^*, respectively.
-
-Singular-value decomposition allows us to compute *U* and *V* in one go
-from *A*:
-
-
-![](./images/37b83a39-36b7-47eb-b790-3981bedf634b.png)
-
-
-In essence, singular-value decomposition is a matrix-factorization
-technique. It takes in an input, *A*, and outputs *U* and *V* such that:
-
-
-![](./images/2ddd6e73-d027-463c-bb87-1a9f7f0c262f.png)
-
-
-Where
-![](./images/d4a5f097-a8e4-4459-9b20-2b07a31b5713.png)
-is a diagonal matrix. It is used for scaling purposes and, for the sake
-of this illustration, can be assumed to be merged with either *U* or
-*V.* Therefore, we now have:
-
-
-![](./images/fd8ec9cb-9e3f-47a1-9490-35d2da0d9290.png)
-
-
-The *U* matrix, which is essentially composed of user principal
-components, is typically called the user-embedding matrix. Its
-counterpart, *V*, is called the movie-embedding matrix.
-
-The classic version of SVD, like most other machine learning algorithms,
-does not work with sparse matrices. However, Simon Funk figured out a
-workaround for this problem, and his solution led to one of the most
-famous solutions in the world of recommender systems.
-
-Funk\'s system took in the sparse ratings matrix, *A*, and constructed
-two dense user- and item-embedding matrices, *U* and *V* respectively.
-These dense matrices directly gave us the predictions for all the
-missing values in the original matrix, *A.*
 
 Let\'s now implement the SVD filter using the [surprise] package:
 
@@ -944,19 +757,7 @@ The SVD filter outperforms all other filters, with an RMSE score of
 Summary
 =======
 
-This brings us to the end of our discussion on collaborative filters. In
-this lab, we built various kinds of user-based collaborative filters
-and, by extension, learned to build item-based collaborative filters as
-well.
-
-We then shifted our focus to model-based approaches that rely on machine
-learning algorithms to churn out predictions. We were introduced to the
-*surprise* library and used it to implement a clustering model based on
-kNN. We then took a look at an approach to using supervised learning
-algorithms to predict the missing values in the ratings matrix. Finally,
-we gained a layman\'s understanding of the singular-value decomposition
-algorithm and implemented it using [surprise]*.*
-
-All the recommenders we\'ve built so far reside only inside our Jupyter
-Notebooks. In the next lab, we will learn how to deploy our models
-to the web, where they can be used by anyone on the internet.
+1. We built and explored various user-based and item-based collaborative filters.  
+2. We introduced model-based approaches using machine learning, including clustering with kNN and supervised learning algorithms for rating predictions.  
+3. We gained an understanding of singular-value decomposition (SVD) and implemented it using the *surprise* library.  
+4. In the next lab, we'll learn how to deploy our models to the web for public use.

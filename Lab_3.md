@@ -51,7 +51,7 @@ import pandas as pd
 import numpy as np
 
 #Load the dataset into a pandas dataframe
-df = pd.read_csv('../data/movies_')
+df = pd.read_csv('../movies_metadata.csv')
 
 #Display the first five movies in the dataframe
 df.head()
@@ -96,10 +96,9 @@ Let us now calculate the value of *m*:
 #Calculate the number of votes garnered by the 80th percentile movie
 m = df['vote_count'].quantile(0.80)
 m
-
+```
 OUTPUT:
 50.0
-```
 
 
 We can see that only 20% of the movies have gained more than 50 votes.
@@ -121,10 +120,9 @@ q_movies = q_movies[q_movies['vote_count'] >= m]
 
 #Inspect the number of movies that made the cut
 q_movies.shape
-
+```
 OUTPUT:
 (8963, 24)
-```
 
 
 We see that from our dataset of 45,000 movies approximately 9,000 movies
@@ -143,10 +141,9 @@ is *C,* the mean rating for all the movies in the dataset:
 # Calculate C
 C = df['vote_average'].mean()
 C
-
+```
 OUTPUT:
 5.6182072151341851
-```
 
 
 We can see that the average rating of a movie is approximately 5.6/10.
@@ -330,10 +327,9 @@ take a look at the [genres] object of one of our movies:
 ```
 #Print genres of the first movie
 df.iloc[0]['genres']
-
+```
 OUTPUT:
 "[{'id': 16, 'name': 'Animation'}, {'id': 35, 'name': 'Comedy'}, {'id': 10751, 'name': 'Family'}]"
-```
 
 
 We can observe that the output is a stringified dictionary. In order for

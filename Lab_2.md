@@ -67,6 +67,21 @@ df = pd.read_csv('../data/movies_metadata.csv')
 df.head()
 ```
 
+or you can download directly from kagglehub:
+
+```
+import kagglehub
+
+# Download latest version
+path = kagglehub.dataset_download("rounakbanik/the-movies-dataset")
+
+print("Path to dataset files:", path)
+
+df = pd.read_csv(path + "/movies_metadata.csv")
+
+df.head()
+```
+
 
 Et voila! You should be able to see a table-like structure with five
 rows, each row representing a movie. You can also see that the table has
@@ -107,10 +122,9 @@ there? We can find this out by running the following code:
 ```
 #Output the shape of df
 df.shape
-
+```
 OUTPUT:
 (45466, 24)
-```
 
 
 The result gives us the number of rows and columns present in df. We can
@@ -126,7 +140,7 @@ the following:
 ```
 #Output the columns of df
 df.columns
-
+```
 OUTPUT:
 
 Index(['adult', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id',
@@ -136,7 +150,6 @@ Index(['adult', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id',
        'spoken_languages', 'status', 'tagline', 'title', 'video',
        'vote_average', 'vote_count'],
       dtype='object')
-```
 
 
 We see that we have a lot of information on these movies, including
@@ -225,7 +238,7 @@ Next, let\'s check out the data types of our various features:
 ```
 #Get information of the data types of each feature
 small_df.info()
-
+```
 OUTPUT:
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 45466 entries, 0 to 45465
@@ -238,7 +251,6 @@ runtime 45203 non-null float64
 genres 45466 non-null object
 dtypes: float64(2), object(4)
 memory usage: 2.1+ MB
-```
 
 
 A curious observation here is that pandas correctly deciphers
@@ -253,12 +265,11 @@ feature. Let\'s try to convert the [budget] feature to
 ```
 #Convert budget to float
 df['budget'] = df['budget'].astype('float')
-
+```
 OUTPUT:
 ...
 ...
 ValueError: could not convert string to float: '/zaSf5OG7V8X8gqFvly88zDdRm46.jpg'
-```
 
 
 Running this cell throws [ValueError]. It is easy to guess that
@@ -393,10 +404,9 @@ object:
 
 ```
 type(small_df['year'])
-
+```
 OUTPUT:
 pandas.core.series.Series
-```
 
 
 The Pandas Series is a one-dimensional labelled array capable of holding

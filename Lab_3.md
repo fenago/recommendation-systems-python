@@ -56,6 +56,20 @@ df = pd.read_csv('../movies_metadata.csv')
 #Display the first five movies in the dataframe
 df.head()
 ```
+or you can load straight from kagglehub:
+
+```
+import kagglehub
+
+# Download latest version
+path = kagglehub.dataset_download("rounakbanik/the-movies-dataset")
+
+print("Path to dataset files:", path)
+
+df = pd.read_csv(path + "/movies_metadata.csv")
+
+df.head()
+```
 
 
 Upon running the cell, you should see a familiar table-like structure

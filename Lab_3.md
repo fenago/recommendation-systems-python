@@ -366,11 +366,10 @@ print(type(a))
 #Apply literal_eval and output type
 b = literal_eval(a)
 print(type(b))
-
+```
 OUTPUT:
 <class 'str'>
 <class 'list'>
-```
 
 
 We now have all the tools required to convert the *genres* feature into

@@ -111,6 +111,7 @@ Let us now calculate the value of *m*:
 m = df['vote_count'].quantile(0.80)
 m
 ```
+
 OUTPUT:
 50.0
 
@@ -135,6 +136,7 @@ q_movies = q_movies[q_movies['vote_count'] >= m]
 #Inspect the number of movies that made the cut
 q_movies.shape
 ```
+
 OUTPUT:
 (8963, 24)
 
@@ -156,6 +158,7 @@ is *C,* the mean rating for all the movies in the dataset:
 C = df['vote_average'].mean()
 C
 ```
+
 OUTPUT:
 5.6182072151341851
 
@@ -251,7 +254,11 @@ df = pd.read_csv('../data/movies_metadata.csv')
 
 #Print all the features (or columns) of the DataFrame
 df.columns
+```
 
+**Output**
+
+```
 OUTPUT:
 Index(['adult', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id',
        'imdb_id', 'original_language', 'original_title', 'overview',
@@ -342,6 +349,7 @@ take a look at the [genres] object of one of our movies:
 #Print genres of the first movie
 df.iloc[0]['genres']
 ```
+
 OUTPUT:
 "[{'id': 16, 'name': 'Animation'}, {'id': 35, 'name': 'Comedy'}, {'id': 10751, 'name': 'Family'}]"
 
@@ -367,10 +375,12 @@ print(type(a))
 b = literal_eval(a)
 print(type(b))
 ```
+
+```
 OUTPUT:
 <class 'str'>
 <class 'list'>
-
+```
 
 We now have all the tools required to convert the *genres* feature into
 the Python dictionary format.

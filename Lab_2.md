@@ -123,6 +123,7 @@ there? We can find this out by running the following code:
 #Output the shape of df
 df.shape
 ```
+
 OUTPUT:
 (45466, 24)
 
@@ -141,6 +142,10 @@ the following:
 #Output the columns of df
 df.columns
 ```
+
+**Output**
+
+```
 OUTPUT:
 
 Index(['adult', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id',
@@ -150,7 +155,7 @@ Index(['adult', 'belongs_to_collection', 'budget', 'genres', 'homepage', 'id',
        'spoken_languages', 'status', 'tagline', 'title', 'video',
        'vote_average', 'vote_count'],
       dtype='object')
-
+```
 
 We see that we have a lot of information on these movies, including
 their title, budget, genres, release date, and revenue.
@@ -239,6 +244,11 @@ Next, let\'s check out the data types of our various features:
 #Get information of the data types of each feature
 small_df.info()
 ```
+
+
+**Output**
+
+```
 OUTPUT:
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 45466 entries, 0 to 45465
@@ -251,7 +261,7 @@ runtime 45203 non-null float64
 genres 45466 non-null object
 dtypes: float64(2), object(4)
 memory usage: 2.1+ MB
-
+```
 
 A curious observation here is that pandas correctly deciphers
 [revenue] and [runtime] as float data, but assigns the
@@ -266,11 +276,16 @@ feature. Let\'s try to convert the [budget] feature to
 #Convert budget to float
 df['budget'] = df['budget'].astype('float')
 ```
+
+
+**Output**
+
+```
 OUTPUT:
 ...
 ...
 ValueError: could not convert string to float: '/zaSf5OG7V8X8gqFvly88zDdRm46.jpg'
-
+```
 
 Running this cell throws [ValueError]. It is easy to guess that
 one of the budget fields had a [\'/zaSf\...\'] string as its
@@ -405,6 +420,7 @@ object:
 ```
 type(small_df['year'])
 ```
+
 OUTPUT:
 pandas.core.series.Series
 

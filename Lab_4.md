@@ -167,7 +167,11 @@ tfidf_matrix = tfidf.fit_transform(df['overview'])
 
 #Output the shape of tfidf_matrix
 tfidf_matrix.shape
+```
 
+**Output**
+
+```
 OUTPUT:
 (45466, 75827)
 ```
@@ -460,7 +464,11 @@ this, we will first examine the structure of the dictionary in the
 ```
 #Print the first cast member of the first movie in df
 df.iloc[0]['crew'][0]
+```
 
+**Output**
+
+```
 OUTPUT:
 {'credit_id': '52fe4284c3a36847f8024f49',
  'department': 'Directing',
@@ -501,7 +509,11 @@ df['director'] = df['crew'].apply(get_director)
 
 #Print the directors of the first five movies
 df['director'].head()
+```
 
+**Output**
+
+```
 OUTPUT:
 0 John Lasseter
 1 Joe Johnston
@@ -636,7 +648,11 @@ string containing words that represent genres, cast, and keywords:
 ```
 #Display the soup of the first movie
 df.iloc[0]['soup']
+```
 
+**Output**
+
+```
 OUTPUT:
 'jealousy toy boy tomhanks timallen donrickles johnlasseter animation comedy family'
 ```

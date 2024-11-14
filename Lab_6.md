@@ -286,7 +286,11 @@ model:
 
 ```
 score(baseline)
+```
 
+**Output**
+
+```
 OUTPUT:
 1.2470926188539486
 ```
@@ -375,6 +379,7 @@ score(cf_user_mean)
 
 ```
 
+**Output**
 
 ```
 OUTPUT:
@@ -482,7 +487,11 @@ def cf_user_wmean(user_id, movie_id):
 
 
 score(cf_user_wmean)
+```
 
+**Output**
+
+```
 OUTPUT:
 1.0174483808407588
 ```
@@ -573,7 +582,11 @@ def cf_gender(user_id, movie_id):
     return gender_rating
 
 score(cf_gender)
+```
 
+**Output**
+
+```
 OUTPUT:
 1.0330308800874282
 ```
@@ -635,7 +648,11 @@ def cf_gen_occ(user_id, movie_id):
     return 3.0
 
 score(cf_gen_occ)
+```
 
+**Output**
+
+```
 OUTPUT:
 1.1391976012043645
 ```

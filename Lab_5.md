@@ -107,7 +107,11 @@ see whether the Euclidean distance metric is able to capture this:
 
 ```
 euclidean(u1, u2)
+```
 
+**Output**
+
+```
 OUTPUT:
 7.4833147735478827
 ```
@@ -119,7 +123,11 @@ approximately 7.48:
 
 ```
 euclidean(u1, u3)
+```
 
+**Output**
+
+```
 OUTPUT:
 1.4142135623730951
 ```
@@ -146,7 +154,11 @@ alice = [1,1,3,2,4]
 bob = [2,2,4,3,5]
 
 euclidean(alice, bob)
+```
 
+**Output**
+
+```
 OUTPUT:
 2.2360679774997898
 ```
@@ -166,7 +178,11 @@ Consider another user, Eve, who has the polar opposite tastes to Alice:
 eve = [5,5,3,4,2]
 
 euclidean(eve, alice)
+```
 
+**Output**
+
+```
 OUTPUT:
 6.324555320336759
 ```
@@ -186,14 +202,19 @@ from scipy.stats import pearsonr
 
 pearsonr(alice, bob)
 
-OUTPUT:
-(1.0, 0.0)
-pearsonr(alice, eve)
 
-OUTPUT:
-(-1.0, 0.0)
+pearsonr(alice, eve)
 ```
 
+**Output**
+
+```
+OUTPUT:
+(-1.0, 0.0)
+
+OUTPUT:
+(1.0, 0.0)
+```
 
 The first element of our list output is the Pearson score. We see that
 Alice and Bob have the highest possible similarity score, whereas Alice
@@ -543,10 +564,13 @@ about the ratio of variance contained by each principal component:
 
 ```
 pca.explained_variance_ratio
+```
 
+**Output**
+
+```
 OUTPUT:
 array([ 0.72770452, 0.23030523])
-
 ```
 
 
@@ -663,7 +687,11 @@ gbc.fit(X_train, y_train)
 
 #Compute the accuracy on the test set
 gbc.score(X_test, y_test)
+```
 
+**Output**
+
+```
 OUTPUT:
 0.97368421052631582
 ```
